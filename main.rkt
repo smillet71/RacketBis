@@ -2,29 +2,30 @@
 
 ;
 (require "app.rkt")
-
+(require "log.rkt")
 
 ; setup application
 (define (setup-app filepath)
-  (displayln (string-append ">> setup app " filepath)))
+  (log-info (string-append "  - setup file path: " filepath)))
 
 ; update application state
 (define (update-app)
-  (displayln ">> update app"))
+  (log-info ">> update app"))
 
 ; close application
 (define (close-app)
-  (displayln ">> close app"))
+  (log-info ">> close app"))
 
 ;
 (define (main)
   ;
-  (displayln ">> begin")
+  (set-log-level 'debug)
+  (log-info ">> begin")
   (let ((filepath "c:/devs/racket/data")
         (app (new-app setup-app update-app close-app)))
     (run-app app filepath)
     )
-  (displayln ">> end"))
+  (log-info ">> end"))
 
 ;
 (main)

@@ -1,7 +1,14 @@
 #lang racket
 
-(provide log-fatal log-error log-warning log-info log-debug )
+(require racket/date)
 
+
+(provide set-log-level log-fatal log-error log-warning log-info log-debug )
+
+;
+(date-display-format 'rfc2822)
+
+;
 (define log-level 0)
 
 (define (log-fatal message)
@@ -32,4 +39,4 @@
         [else (set! log-level 0)]))
 
 (define (log level message)
-  (println (list level "-->" message)))
+  (printf "# ~a ~a ~a ~n" level (date->string (current-date)) message))
