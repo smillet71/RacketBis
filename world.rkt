@@ -32,3 +32,17 @@
 (create-node 1 0 0 45 300 400)
 (create-node 1 0 0 45 300 400)
 (create-node 1 0 0 45 300 400)
+
+;
+(define (new-vv n m)
+  (let ((a (lambda (i) (make-vector m))))
+    (build-vector n a)))
+
+;
+(define (vv-set! a i j v)
+  (vector-set! (vector-ref a i) j v))
+
+;
+(define (vv-ref a i j)
+  (vector-ref (vector-ref a i) j))
+
