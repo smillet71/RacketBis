@@ -1,5 +1,7 @@
 #lang racket
 
+(provide log-fatal log-error log-warning log-info log-debug )
+
 (define log-level 0)
 
 (define (log-fatal message)

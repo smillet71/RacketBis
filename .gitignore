@@ -1,0 +1,5 @@
+
+compiled/drracket/errortrace/app_rkt.dep
+*.zo
+*.dep
+*.bak
