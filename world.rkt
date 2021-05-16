@@ -2,47 +2,52 @@
 
 (require math/base)
 
+;
+;(provide (struct-out Node)
+;         (struct-out Area))
+;
+(provide create-world
+         create-area
+         create-node
+         create-gate
+         add-area-to-world
+         add-node-to-area)
+
+; a world is composed of areas
+(struct World (areas) #:transparent #:mutable)
+
 ; an area is composed of nodes, areas are connected by gates
-(struct Area (id nodes links gates) #:transparent)
+(struct Area (id nodes entities) #:transparent #:mutable)
 
 ; a node has a position
-(struct Node (id x y ) #:transparent)
+(struct Node (id type x y links) #:transparent #:mutable)
 
 ; a link allows to go from one node to another
 (struct Link (n1 n2)  #:transparent)
 
-;
-(define (create-node id x0 y0 dAng dmin dmax)
-  (let* ((d (+ dmin (random-natural (- dmax dmin))))
-        (aDeg (* dAng (random-natural 12)))
-        (aRad (/ (/ aDeg 4) pi))
-        (x (+ x0 (* d (cos aRad))))
-        (y (+ y0 (* d (sin aRad)))))
-  (Node id x y )))
+; create a new world
+(define (create-world)
+  (World (make-hash)))
 
-;
-(define (create-nodes nb dmin dmax)
-  '())
+; add areas to the world
+(define (add-area-to-world area world)
+  (hash-set! (World-areas world) (Area-id area) area))
 
-;
-(random-natural 5)
-(create-node 1 0 0 45 300 400)
-(create-node 1 0 0 45 300 400)
-(create-node 1 0 0 45 300 400)
-(create-node 1 0 0 45 300 400)
-(create-node 1 0 0 45 300 400)
-(create-node 1 0 0 45 300 400)
+; create a new area
+(define (create-area id)
+  (Area id (make-hash) (make-hash)))
 
-;
-(define (new-vv n m)
-  (let ((a (lambda (i) (make-vector m))))
-    (build-vector n a)))
+; add a node to an area
+(define (add-node-to-area n a)
+  (if (eq? empty (Area-nodes a))
+      (set-Area-nodes! a (make-hash))
+      '())
+  (hash-set! (Area-nodes a) (Node-id n) n))
 
-;
-(define (vv-set! a i j v)
-  (vector-set! (vector-ref a i) j v))
+; create a node
+(define (create-node id x y links)
+  (Node id 'Node x y links))
 
-;
-(define (vv-ref a i j)
-  (vector-ref (vector-ref a i) j))
-
+; create a gate
+(define (create-gate id x y links)
+  (Node id 'Gate x y links))
