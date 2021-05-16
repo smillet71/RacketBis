@@ -12,6 +12,7 @@
   (add-node-to-area (create-node 100 0 0 (list -1 101 102)) area1)
   (add-node-to-area (create-node 101 0 50 (list 100)) area1)
   (add-node-to-area (create-node 102 0 -50 (list 100)) area1)
+  (create-entity-in-area 1000 'Ship 'CargoShip 0 0 100 area1)
   (add-area-to-world area1 world))
 
 ; define and populate area2 with 1 Gate and 4 nodes

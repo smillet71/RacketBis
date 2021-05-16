@@ -1,24 +1,25 @@
 #lang racket
 
-;
+; interface
 (provide create-world
          create-area
          create-node
          create-gate
          add-area-to-world
-         add-node-to-area)
+         add-node-to-area
+         create-entity-in-area)
 
 ; a world is composed of areas
 (struct World (areas) #:transparent #:mutable)
 
-; an area is composed of nodes, areas are connected by gates
+; an area has an id and is composed of nodes, areas are connected by gates
 (struct Area (id nodes entities) #:transparent #:mutable)
 
-; a node has a position
+; a node has an id, a type (gate/node), a position (x, y) and a list of links to other nodes
 (struct Node (id type x y links) #:transparent #:mutable)
 
-; a link allows to go from one node to another
-(struct Link (n1 n2)  #:transparent)
+; an entity has an id, a type, a position relative to a node (dx, dy)
+(struct Entity (id type class node-id dx dy) #:transparent #:mutable)
 
 ; create a new world
 (define (create-world)
@@ -34,9 +35,6 @@
 
 ; add a node to an area
 (define (add-node-to-area n a)
-  (if (eq? empty (Area-nodes a))
-      (set-Area-nodes! a (make-hash))
-      '())
   (hash-set! (Area-nodes a) (Node-id n) n))
 
 ; create a node
@@ -46,3 +44,9 @@
 ; create a gate
 (define (create-gate id x y links)
   (Node id 'Gate x y links))
+
+; create an entity and attach it to an area
+(define (create-entity-in-area id type class node-id dx dy area)
+  (let ((entity (Entity id type class node-id dx dy)))
+    (hash-set! (Area-entities area) id entity)))
+
