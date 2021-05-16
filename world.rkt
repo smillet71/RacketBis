@@ -1,10 +1,5 @@
 #lang racket
 
-(require math/base)
-
-;
-;(provide (struct-out Node)
-;         (struct-out Area))
 ;
 (provide create-world
          create-area
