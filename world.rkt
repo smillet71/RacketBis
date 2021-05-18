@@ -3,11 +3,15 @@
 ; interface
 (provide create-world
          create-area
+         get-world-area
          create-node
          create-gate
          add-area-to-world
          add-node-to-area
-         create-entity-in-area)
+         create-entity-in-area
+         create-entity-position
+         (struct-out World)
+         (struct-out Area))
 
 ; a world is composed of areas
 (struct World (areas) #:transparent #:mutable)
@@ -18,8 +22,11 @@
 ; a node has an id, a type (gate/node), a position (x, y) and a list of links to other nodes
 (struct Node (id type x y links) #:transparent #:mutable)
 
-; an entity has an id, a type, a position relative to a node (dx, dy)
-(struct Entity (id type class node-id dx dy) #:transparent #:mutable)
+; an entity has an id, a type, a position 
+(struct Entity (id faction type class state position) #:transparent #:mutable)
+
+; an entity position relative to a node
+(struct EntityPosition (node-id dx dy) #:transparent #:mutable)
 
 ; create a new world
 (define (create-world)
@@ -28,6 +35,10 @@
 ; add areas to the world
 (define (add-area-to-world area world)
   (hash-set! (World-areas world) (Area-id area) area))
+
+; get a world area
+(define (get-world-area world area-id)
+  (hash-ref (World-areas world) area-id))
 
 ; create a new area
 (define (create-area id)
@@ -46,7 +57,10 @@
   (Node id 'Gate x y links))
 
 ; create an entity and attach it to an area
-(define (create-entity-in-area id type class node-id dx dy area)
-  (let ((entity (Entity id type class node-id dx dy)))
+(define (create-entity-in-area id faction type class position area)
+  (let ((entity (Entity id faction type class '() position)))
     (hash-set! (Area-entities area) id entity)))
 
+; create an entity position
+(define (create-entity-position node-id dx dy)
+  (EntityPosition node-id dx dy))
