@@ -40,7 +40,7 @@
 (define text-font (make-font #:size 3
                              #:family 'system))
 
-; placement d'un texte pour le centrer
+; placement d'un texte pour le centrer.
 (define (get-text-dxy dc txt)
   (define-values (width height a b) (send dc get-text-extent txt))
   (list (/ width 2.0) (/ height 2.0)))
